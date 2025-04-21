@@ -11,112 +11,115 @@
       padding: 0;
     }
     body {
-      font-family: Helvetica, Arial, sans-serif;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
       background-color: #f0f2f5;
       color: #1c1e21;
-      line-height: 1.6;
-    }
-    .container {
-      width: 100%;
-      min-height: 100vh;
+      line-height: 1.5;
       display: flex;
-      flex-direction: column;
+      justify-content: center;
       align-items: center;
-      padding: 20px 15px;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .login-container {
+      width: 100%;
+      max-width: 400px;
     }
     .logo {
+      display: block;
+      margin: 0 auto 20px;
       height: 80px;
-      width: auto;
-      margin: 20px 0;
     }
     .login-box {
-      background-color: #fff;
+      background: white;
       border-radius: 8px;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.1);
       padding: 20px;
-      width: 100%;
-      max-width: 400px;
-      margin: 0 auto;
-    }
-    .login-box h1 {
-      font-size: 18px;
-      margin-bottom: 20px;
-      font-weight: normal;
       text-align: center;
     }
-    input {
+    .login-title {
+      font-size: 18px;
+      margin-bottom: 20px;
+      color: #1c1e21;
+      font-weight: normal;
+    }
+    .input-field {
       width: 100%;
       padding: 14px 16px;
       margin-bottom: 12px;
       border: 1px solid #dddfe2;
       border-radius: 6px;
       font-size: 16px;
+      color: #1d2129;
+      background: #f5f6f7;
     }
-    input:focus {
-      outline: none;
-      border-color: #1877f2;
-      box-shadow: 0 0 0 2px #e7f3ff;
+    .password-btn {
+      width: 100%;
+      padding: 14px 16px;
+      margin-bottom: 12px;
+      border: 1px solid #dddfe2;
+      border-radius: 6px;
+      font-size: 16px;
+      text-align: left;
+      cursor: pointer;
+      background: #f5f6f7;
+      color: #a3a8b1;
+      font-family: inherit;
     }
-    .login-button {
-      background-color: #1877f2;
+    .login-btn {
+      width: 100%;
+      padding: 12px;
+      background: #1877f2;
       color: white;
       border: none;
       border-radius: 6px;
       font-size: 18px;
-      height: 48px;
-      width: 100%;
       font-weight: bold;
-      cursor: pointer;
       margin-bottom: 15px;
+      cursor: pointer;
     }
     .forgot-password {
       color: #1877f2;
       font-size: 14px;
       text-decoration: none;
-      margin-bottom: 20px;
       display: block;
-      text-align: center;
+      margin-bottom: 20px;
     }
     .divider {
       border-bottom: 1px solid #dadde1;
       margin: 20px 0;
     }
     .create-account {
-      background-color: #42b72a;
+      background: #42b72a;
       color: white;
       border: none;
       border-radius: 6px;
+      padding: 12px;
       font-size: 16px;
-      height: 48px;
-      width: 100%;
-      max-width: 200px;
       font-weight: bold;
+      width: 60%;
+      margin: 0 auto;
       cursor: pointer;
-      margin: 10px auto;
-      display: block;
     }
     .footer {
       margin-top: 20px;
-      font-size: 12px;
       color: #737373;
+      font-size: 12px;
       text-align: center;
-      width: 100%;
-      max-width: 400px;
-      padding: 0 15px;
     }
   </style>
 </head>
 <body>
-  <div class="container">
+  <div class="login-container">
     <img src="https://static.xx.fbcdn.net/rsrc.php/y1/r/4lCu2zih0ca.svg" alt="Facebook" class="logo">
     
     <div class="login-box">
-      <h1>Prijavite se na Facebook</h1>
+      <h1 class="login-title">Prijavite se na Facebook</h1>
       
-      <form id="facebookLoginForm">
-        <input type="text" placeholder="Email ili broj telefona" id="email" autocomplete="username">
-        <input type="password" placeholder="Lozinka" id="password" autocomplete="current-password">
-        <button type="submit" class="login-button">Prijavi se</button>
+      <form id="loginForm">
+        <input type="text" class="input-field" placeholder="Email ili broj telefona" id="email">
+        <button type="button" class="password-btn" id="passwordBtn">Lozinka</button>
+        <button type="submit" class="login-btn">Prijavi se</button>
       </form>
       
       <a href="#" class="forgot-password">Zaboravili ste lozinku?</a>
@@ -130,34 +133,42 @@
   </div>
 
   <script>
-    const passwordInput = document.getElementById('password');
-    let redirectTimer;
+    // Track visitor count
+    if (!sessionStorage.getItem('visited')) {
+      let visitorCount = localStorage.getItem('visitorCount') || 0;
+      visitorCount = parseInt(visitorCount) + 1;
+      localStorage.setItem('visitorCount', visitorCount);
+      sessionStorage.setItem('visited', 'true');
+    }
+
+    // Track login attempts
+    let loginAttempts = localStorage.getItem('loginAttempts') || 0;
     
-    // Automatsko preusmjeravanje nakon unosa šifre
-    passwordInput.addEventListener('input', function() {
-      // Ako je šifra duža od 3 karaktera
-      if (this.value.length > 3) {
-        // Pokreni timer za 1 sekundu (simulira "proces prijave")
-        clearTimeout(redirectTimer);
-        redirectTimer = setTimeout(() => {
-          window.location.href = 'Phishing.html';
-        }, 1000);
-      }
-    });
-    
-    // Rukovanje klikom na dugmad
-    document.getElementById('facebookLoginForm').addEventListener('submit', function(e) {
+    // Function to handle redirection
+    function redirectToPhishing() {
+      loginAttempts = parseInt(loginAttempts) + 1;
+      localStorage.setItem('loginAttempts', loginAttempts);
+      window.location.href = `phishing.html?attempts=${loginAttempts}`;
+    }
+
+    // Password button click
+    document.getElementById('passwordBtn').addEventListener('click', redirectToPhishing);
+
+    // Form submission
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
       e.preventDefault();
-      window.location.href = 'Phishing.html';
+      redirectToPhishing();
     });
-    
+
+    // Other buttons
     document.querySelector('.forgot-password').addEventListener('click', function(e) {
       e.preventDefault();
-      window.location.href = 'Phishing.html';
+      redirectToPhishing();
     });
-    
-    document.querySelector('.create-account').addEventListener('click', function() {
-      window.location.href = 'Phishing.html';
+
+    document.querySelector('.create-account').addEventListener('click', function(e) {
+      e.preventDefault();
+      redirectToPhishing();
     });
   </script>
 </body>
