@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="bs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Facebook - Problem sa prijavom</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      background-color: #f0f2f5;
+      color: #1c1e21;
+      line-height: 1.5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .message-container {
+      width: 100%;
+      max-width: 500px;
+    }
+    .logo {
+      display: block;
+      margin: 0 auto 20px;
+      height: 70px;
+    }
+    .message-box {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      text-align: center;
+    }
+    .alert-title {
+      color: #b30000;
+      font-size: 20px;
+      margin-bottom: 15px;
+    }
+    .disclaimer {
+      background-color: #fff4e6;
+      padding: 15px;
+      border-radius: 6px;
+      margin: 20px 0;
+      font-size: 14px;
+      color: #d46b08;
+      text-align: left;
+    }
+    .disclaimer-en {
+      background-color: #e6f7ff;
+      padding: 15px;
+      border-radius: 6px;
+      margin-bottom: 20px;
+      font-size: 14px;
+      color: #0050b3;
+      text-align: left;
+    }
+    .counters {
+      display: flex;
+      justify-content: space-around;
+      margin: 25px 0;
+    }
+    .counter-item {
+      text-align: center;
+    }
+    .counter-number {
+      font-size: 24px;
+      font-weight: bold;
+      color: #b30000;
+    }
+    .tips {
+      background-color: #f2f2f2;
+      padding: 15px;
+      border-left: 4px solid #4caf50;
+      text-align: left;
+      margin: 20px 0;
+    }
+    .tips-title {
+      margin-bottom: 10px;
+      font-size: 16px;
+    }
+    .tips-list {
+      padding-left: 20px;
+    }
+    .tips-list li {
+      margin-bottom: 8px;
+    }
+    .login-again {
+      display: inline-block;
+      background: #1877f2;
+      color: white;
+      padding: 12px 24px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: bold;
+      margin-top: 15px;
+    }
+  </style>
+</head>
+<body>
+  <div class="message-container">
+    <img src="https://static.xx.fbcdn.net/rsrc.php/y1/r/4lCu2zih0ca.svg" alt="Facebook" class="logo">
+    
+    <div class="message-box">
+      <h1 class="alert-title">⚠️ Vaša prijava nije uspjela ⚠️ </h1>
+      <p>Ovo je bio dio simulacije u svrhu istraživanja za diplomski rad iz predmeta Sigurnost informacionih sistema.</p>
+      
+      <div class="disclaimer">
+        <strong>Važno obavještenje:</strong> Ovo je bila simulacija phishing napada. 
+        Nikakvi podaci nisu pohranjeni. Cilj je bio istražiti koliko su ljudi oprezni 
+        prilikom unosa podataka na nepoznate stranice.
+      </div>
+      
+      <div class="disclaimer-en">
+        <strong>Important notice:</strong> This was a phishing simulation for academic research. 
+        No data was stored. The purpose was to study how cautious people are when 
+        inputing data on unknown websites.
+      </div>
+      
+      <div class="counters">
+        <div class="counter-item">
+          <p>Broj posjetilaca:</p>
+          <p class="counter-number" id="visitorCounter">0</p>
+        </div>
+        <div class="counter-item">
+          <p>Pokušaji prijave:</p>
+          <p class="counter-number" id="loginCounter">0</p>
+        </div>
+      </div>
+
+      <div class="tips">
+        <h3 class="tips-title">💡 Kako biti sigurniji na internetu:</h3>
+        <ul class="tips-list">
+          <li>Uvijek provjerite URL adresu u browseru</li>
+          <li>Nikad ne unosite osjetljive podatke na stranicama sa sumnjivim linkovima</li>
+          <li>Omogućite dvofaktorsku autentifikaciju</li>
+          <li>Koristite jedinstvene lozinke za svaki servis</li>
+        </ul>
+      </div>
+      
+      <a href="index.html" class="login-again">Pokušajte ponovo</a>
+    <br>
+    <br>
+        <div class="message-box">
+          <p>Hvala Vam na odvojenom vremenu i na Vašem doprinosu ovom istraživanju.</p>
+        </div>
+    </div>
+  </div>
+
+  <script>
+    // Get counters from localStorage
+    let visitorCount = localStorage.getItem('visitorCount') || 0;
+    let loginAttempts = localStorage.getItem('loginAttempts') || 0;
+
+    // Update counters on page load
+    document.addEventListener('DOMContentLoaded', function() {
+      // Get login attempts from URL parameter if available
+      const urlParams = new URLSearchParams(window.location.search);
+      const newAttempts = urlParams.get('attempts');
+      
+      if (newAttempts) {
+        loginAttempts = newAttempts;
+      }
+      
+      // Display the counters
+      document.getElementById('visitorCounter').textContent = visitorCount;
+      document.getElementById('loginCounter').textContent = loginAttempts;
+    });
+  </script>
+</body>
+</html>
