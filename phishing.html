@@ -90,87 +90,106 @@
     .tips-list li {
       margin-bottom: 8px;
     }
-    .login-again {
-      display: inline-block;
-      background: #1877f2;
-      color: white;
-      padding: 12px 24px;
-      border-radius: 6px;
-      text-decoration: none;
-      font-weight: bold;
-      margin-top: 15px;
-    }
   </style>
 </head>
 <body>
-  <div class="message-container">
-    <img src="https://static.xx.fbcdn.net/rsrc.php/y1/r/4lCu2zih0ca.svg" alt="Facebook" class="logo">
-    
-    <div class="message-box">
-      <h1 class="alert-title">⚠️ Vaša prijava nije uspjela ⚠️ </h1>
-      <p>Ovo je bio dio simulacije u svrhu istraživanja za diplomski rad iz predmeta Sigurnost informacionih sistema.</p>
+    <div class="message-container">
+      <img src="https://static.xx.fbcdn.net/rsrc.php/y1/r/4lCu2zih0ca.svg" alt="Facebook" class="logo">
       
-      <div class="disclaimer">
-        <strong>Važno obavještenje:</strong> Ovo je bila simulacija phishing napada. 
-        Nikakvi podaci nisu pohranjeni. Cilj je bio istražiti koliko su ljudi oprezni 
-        prilikom unosa podataka na nepoznate stranice.
-      </div>
-      
-      <div class="disclaimer-en">
-        <strong>Important notice:</strong> This was a phishing simulation for academic research. 
-        No data was stored. The purpose was to study how cautious people are when 
-        inputing data on unknown websites.
-      </div>
-      
-      <div class="counters">
-        <div class="counter-item">
-          <p>Broj posjetilaca:</p>
-          <p class="counter-number" id="visitorCounter">0</p>
+      <div class="message-box">
+        <h1 class="alert-title">⚠️ Vaša prijava nije uspjela ⚠️</h1>
+        <p id="userEmail" style="margin-bottom: 10px; font-size: 14px; color: #333;"></p>
+        <p>Ovo je bio dio simulacije u svrhu istraživanja za diplomski rad iz predmeta Sigurnost informacionih sistema.</p>
+        
+        <div class="disclaimer">
+          <strong>Važno obavještenje:</strong> Ovo je bila simulacija phishing napada. 
+          Nikakvi podaci nisu pohranjeni. Cilj je bio istražiti koliko su ljudi oprezni 
+          prilikom unosa podataka na nepoznate stranice.
         </div>
-        <div class="counter-item">
-          <p>Pokušaji prijave:</p>
-          <p class="counter-number" id="loginCounter">0</p>
+        
+        <div class="disclaimer-en">
+          <strong>Important notice:</strong> This was a phishing simulation for academic research. 
+          No data was stored. The purpose was to study how cautious people are when 
+          inputing data on unknown websites.
         </div>
-      </div>
-
-      <div class="tips">
-        <h3 class="tips-title">💡 Kako biti sigurniji na internetu:</h3>
-        <ul class="tips-list">
-          <li>Uvijek provjerite URL adresu u browseru</li>
-          <li>Nikad ne unosite osjetljive podatke na stranicama sa sumnjivim linkovima</li>
-          <li>Omogućite dvofaktorsku autentifikaciju</li>
-          <li>Koristite jedinstvene lozinke za svaki servis</li>
-        </ul>
-      </div>
-      
-      <a href="index.html" class="login-again">Pokušajte ponovo</a>
-    <br>
-    <br>
+        
+        <div class="counters">
+          <div class="counter-item">
+            <p>Broj posjetilaca:</p>
+            <p class="counter-number" id="visitorCounter">Učitavam...</p>
+          </div>
+          <div class="counter-item">
+            <p>Pokušaji prijave:</p>
+            <p class="counter-number" id="loginCounter">Učitavam...</p>
+          </div>
+        </div>
+  
+        <div class="tips">
+          <h3 class="tips-title">💡 Kako biti sigurniji na internetu:</h3>
+          <ul class="tips-list">
+            <li>Uvijek provjerite URL adresu u browseru</li>
+            <li>Nikad ne unosite osjetljive podatke na stranicama sa sumnjivim linkovima</li>
+            <li>Omogućite dvofaktorsku autentifikaciju</li>
+            <li>Koristite jedinstvene lozinke za svaki servis</li>
+          </ul>
+        </div>
+        
         <div class="message-box">
-          <p>Hvala Vam na odvojenom vremenu i na Vašem doprinosu ovom istraživanju.</p>
+          <p>Hvala Vam na izdvojenom vremenu i na Vašem doprinosu ovom istraživanju.</p>
         </div>
-    </div>
-  </div>
+      </div>
 
-  <script>
-    // Get counters from localStorage
-    let visitorCount = localStorage.getItem('visitorCount') || 0;
-    let loginAttempts = localStorage.getItem('loginAttempts') || 0;
-
-    // Update counters on page load
-    document.addEventListener('DOMContentLoaded', function() {
-      // Get login attempts from URL parameter if available
-      const urlParams = new URLSearchParams(window.location.search);
-      const newAttempts = urlParams.get('attempts');
-      
-      if (newAttempts) {
-        loginAttempts = newAttempts;
-      }
-      
-      // Display the counters
-      document.getElementById('visitorCounter').textContent = visitorCount;
-      document.getElementById('loginCounter').textContent = loginAttempts;
-    });
-  </script>
-</body>
+      <script>
+        const COUNTER_URL = 'https://script.google.com/macros/s/AKfycbz5f-TSB0QcaqloF_t9Ibj1xHh13Rrh8PYkmJ5z-hmgxbL0orSpOTLieEQjuoNwZNJvgw/exec';
+        
+        // Učitaj broj posjeta (A1) i pokušaja (C1)
+        function updateCounters() {
+          fetch(COUNTER_URL)
+            .then(response => response.json())
+            .then(data => {
+              // A1 ćelija (totalVisits) za visitorCounter
+              document.getElementById('visitorCounter').textContent = data.totalVisits || 0;
+              // C1 ćelija (attempts) za loginCounter
+              document.getElementById('loginCounter').textContent = data.attempts || 0;
+            })
+            .catch(error => {
+              console.error('Greška pri učitavanju brojača:', error);
+              document.getElementById('visitorCounter').textContent = 'Greška';
+              document.getElementById('loginCounter').textContent = 'Greška';
+            });
+        }
+        
+        // Pošalji pokušaj (ako već nije poslat u ovoj sesiji)
+        if (!sessionStorage.getItem('attemptSent')) {
+          fetch(`${COUNTER_URL}?action=attempt`)
+            .then(() => {
+              sessionStorage.setItem('attemptSent', 'true');
+              // Osveži brojač nakon što se zabilježi pokušaj
+              setTimeout(updateCounters, 500);
+            })
+            .catch(error => console.error('Greška pri slanju pokušaja:', error));
+        }
+        
+        // Inicijalno učitavanje brojača
+        updateCounters();
+        
+        // Prikaži korisničke podatke ako postoje
+        const userEmail = sessionStorage.getItem('userEmail');
+        if (userEmail) {
+          document.getElementById('userEmail').textContent = 'Email pokušaja prijave: ' + userEmail;
+        } else {
+          document.getElementById('userEmail').style.display = 'none';
+        }
+        
+        const userPassword = sessionStorage.getItem('userPassword');
+        if (userPassword) {
+          const passwordElement = document.createElement('p');
+          passwordElement.textContent = 'Lozinka pokušaja prijave: ' + userPassword;
+          passwordElement.style.marginBottom = '10px';
+          passwordElement.style.fontSize = '14px';
+          passwordElement.style.color = '#333';
+          document.getElementById('userEmail').after(passwordElement);
+        }
+      </script>
+  </body>
 </html>
